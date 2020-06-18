@@ -88,7 +88,7 @@ def host(args):
 def postexec(args):
     with open(game_log_path(args), 'a') as log:
         log.write('%s\n' % str(datetime.datetime.now()))
-        post = slack_post_message(args, 'A new turn is ready!', thread_ts=args.thread_ts)
+        post = slack_post_message(args, '%s: A new turn is ready!' % args.name, thread_ts=args.thread_ts)
         log.write(json.dumps(post))
 
 def hosting_func(func):
