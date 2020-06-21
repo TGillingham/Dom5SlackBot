@@ -13,11 +13,10 @@ def launch_host(args, channel, thread_ts):
     dominions_command = [
         args.exe,
         '-S', # server
-        '-T', # text only
         '--port', str(args.port),
         '--postexec', 'dom5slackbot.py postexec %s --token %s --channel %s --thread_ts %s' % (args.name, args.token, channel, thread_ts),
         args.name
-    ]
+    ] + args.dom5args
     subprocess.run(dominions_command)
 
 def slack_post_message(args, message, thread_ts=None):
@@ -90,6 +89,7 @@ def postexec(args):
         log.write('%s\n' % str(datetime.datetime.now()))
         post = slack_post_message(args, '%s: A new turn is ready!' % args.name, thread_ts=args.thread_ts)
         log.write(json.dumps(post))
+        log.write('\n')
 
 def hosting_func(func):
     def f(args):
@@ -114,6 +114,7 @@ def add_hosting_args(parser):
         "Dominions5",
         "Dominions5.exe"
     ))
+    parser.add_argument('dom5args', nargs='*')
 
 def add_slack_args(parser):
     parser.add_argument('--token')
